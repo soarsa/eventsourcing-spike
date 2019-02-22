@@ -14,7 +14,6 @@ class ExecutionService(ProcessApplication):
     def _(self, repository, event):
         self.create_trade(trade_id=event.trade_id)
 
-
     @staticmethod
     def create_trade(trade_id: int):
         return Trade.create(trade_id=trade_id)
