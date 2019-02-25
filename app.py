@@ -1,7 +1,7 @@
 from commands import Commands
 from processes import ExecutionService
-from eventsourcing.application.system import System, SingleThreadedRunner
-from eventsourcing.application.popo import PopoApplication
+from eventsourcing.application.system import System
+
 
 if __name__ == '__main__':
 

@@ -1,11 +1,11 @@
 from decimal import Decimal
-from datetime import datetime
 from enum import Enum
+from datetime import datetime
 from eventsourcing.domain.model.aggregate import AggregateRoot
 from eventsourcing.domain.model.decorators import attribute
 
 
-class DirectionDTO(Enum):
+class Direction(Enum):
     Buy: int = 0
     Sell: int = 1
 
@@ -72,8 +72,12 @@ class Trade(AggregateRoot):
 
     @attribute
     def status(self) -> TradeStatus:
-        return self.status
+        return self._status
 
     @attribute
     def reason(self) -> str:
-        return self.reason
+        return self._reason
+
+    @attribute
+    def direction(self) -> Direction:
+        return self._direction
