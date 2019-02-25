@@ -8,14 +8,12 @@ if __name__ == '__main__':
     commands_pipeline = Commands | ExecutionService | Commands
     system = System(commands_pipeline)
 
-    with SingleThreadedRunner(system, infrastructure_class=PopoApplication):
+    with system:
+        # Create "create trade" command.
+        cmd_id = system.commands.create_trade()
 
-        with system:
-            # Create "create trade" command.
-            cmd_id = system.commands.create_trade
+        # Check the command has a trade ID
+        cmd = system.executionservice.repository[str(cmd_id)]
 
-            # Check the command has a trade ID
-            cmd = system.executionservice.repository[cmd_id]
-
-            trade = system.orders.repository[cmd.trade_id]
-            print(trade.status)
+        trade = system.orders.repository[cmd.trade_id]
+        print(trade.status)
