@@ -12,7 +12,7 @@ class ExecutionService(ProcessApplication):
 
     @policy.register(CreateTrade)
     def _(self, repository, event):
-        self.create_trade(trade_id=event.trade_id)
+        return self.create_trade(trade_id=event.trade_id)
 
     @staticmethod
     def create_trade(trade_id):

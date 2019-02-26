@@ -4,7 +4,7 @@ import eventsourcing.domain.model.decorators
 from eventsourcing.application.command import CommandProcess
 from eventsourcing.domain.model.decorators import retry as model_retry
 from eventsourcing.exceptions import OperationalError, RecordConflictError
-from aggregates import TradeStatus, Trade
+from aggregates import TradeStatus
 
 
 class Event(Command.Event):
@@ -47,12 +47,12 @@ class Commands(CommandProcess):
 
     @policy.register(CreateTrade.Created)
     def _(self, repository, event):
-        cmd = repository[event.command_id]
+        cmd = repository[event.trade_id]
         cmd.trade_id = event.trade_id
 
     @policy.register(DoneTrade.Done)
     def _(self, repository, event):
-        cmd = repository[event.command_id]
+        cmd = repository[event.trade_id]
         cmd.status = TradeStatus.DONE
 
     @staticmethod
