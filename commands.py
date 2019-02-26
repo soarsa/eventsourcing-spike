@@ -39,6 +39,7 @@ class DoneTrade(Command):
 
 
 class Commands(CommandProcess):
+    
     persist_event_type = CreateTrade.Event
 
     @applicationpolicy
@@ -58,7 +59,7 @@ class Commands(CommandProcess):
     @staticmethod
     @model_retry((OperationalError, RecordConflictError), max_attempts=10, wait=0.01)
     def create_trade(trade_id):
-        cmd = CreateTrade.create(trade_id)
-        cmd.trade_id = trade_id
-        cmd.__save__()
-        return cmd.id
+        trade = CreateTrade.create(trade_id)
+        trade.trade_id = trade_id
+        trade.__save__()
+        return trade.id
