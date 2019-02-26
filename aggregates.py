@@ -19,7 +19,7 @@ class TradeStatus(Enum):
 class Trade(AggregateRoot):
 
     def __init__(self, trade_id: int, trader_name: str, currency_pair: str, spot_rate: Decimal, trade_date: datetime,
-                 value_date: datetime, direction: str, notional: Decimal, dealt_currency: str, **kwargs):
+                 value_date: datetime, direction: Direction, notional: Decimal, dealt_currency: str, **kwargs):
         super(Trade, self).__init__(**kwargs)
 
         self._trade_id = trade_id
@@ -34,9 +34,15 @@ class Trade(AggregateRoot):
         self._status = TradeStatus.PENDING
         self.reason = ""
 
+    class Event(AggregateRoot.Event):
+        pass
+
     @classmethod
-    def create(cls, command_id):
-        return cls.__create__(command_id=command_id)
+    def create(cls, trade_id):
+        return cls.__create__(trade_id=trade_id)
+
+    class Created(Event, AggregateRoot.Event):
+        pass
 
     @attribute
     def trade_id(self) -> int:
@@ -57,10 +63,6 @@ class Trade(AggregateRoot):
     @attribute
     def trade_date(self) -> datetime:
         return self._trade_date
-
-    @attribute
-    def direction(self) -> str:
-        return self._direction
 
     @attribute
     def notional(self) -> Decimal:

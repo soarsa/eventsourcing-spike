@@ -4,7 +4,7 @@ import eventsourcing.domain.model.decorators
 from eventsourcing.application.command import CommandProcess
 from eventsourcing.domain.model.decorators import retry as model_retry
 from eventsourcing.exceptions import OperationalError, RecordConflictError
-from aggregates import TradeStatus
+from aggregates import TradeStatus, Trade
 
 
 class Event(Command.Event):
@@ -14,8 +14,8 @@ class Event(Command.Event):
 class CreateTrade(Command):
 
     @classmethod
-    def create(cls):
-        return cls.__create__()
+    def create(cls, trade_id):
+        return cls.__create__(trade_id)
 
     class Created(Event, Command.Created):
         pass
@@ -57,7 +57,8 @@ class Commands(CommandProcess):
 
     @staticmethod
     @model_retry((OperationalError, RecordConflictError), max_attempts=10, wait=0.01)
-    def create_trade():
-        cmd = CreateTrade.create()
+    def create_trade(trade_id):
+        cmd = CreateTrade.create(trade_id)
+        cmd.trade_id = trade_id
         cmd.__save__()
         return cmd.id

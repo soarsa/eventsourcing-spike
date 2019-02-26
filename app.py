@@ -10,10 +10,6 @@ if __name__ == '__main__':
 
     with system:
         # Create "create trade" command.
-        cmd_id = system.commands.create_trade()
-
-        # Check the command has a trade ID
-        cmd = system.executionservice.repository[str(cmd_id)]
-
-        trade = system.orders.repository[cmd.trade_id]
-        print(trade.status)
+        cmd_id = system.commands.create_trade(1234)
+        cmd = system.commands.repository[cmd_id]
+        trade = system.executionservice.repository[cmd.trade_id]
